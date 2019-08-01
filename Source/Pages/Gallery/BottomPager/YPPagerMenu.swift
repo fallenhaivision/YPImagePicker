@@ -42,6 +42,15 @@ final class YPPagerMenu: UIView {
         }
     }
     
+    func updateMenuItemsConstraints()
+    {
+        let menuItemWidth: CGFloat = UIScreen.main.bounds.width / CGFloat(menuItems.count)
+        for m in menuItems
+        {
+			m.widthConstraint?.constant = menuItemWidth
+        }
+    }
+    
     override func updateConstraints() {
         super.updateConstraints()
         if !didSetConstraints {
@@ -52,6 +61,7 @@ final class YPPagerMenu: UIView {
     
     func refreshMenuItems() {
         didSetConstraints = false
+        updateMenuItemsConstraints()
         updateConstraints()
     }
 }

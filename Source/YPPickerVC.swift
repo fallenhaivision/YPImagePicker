@@ -127,6 +127,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         cameraVC?.v.shotButton.isEnabled = true
         
         updateMode(with: currentController)
+        handleRotation()
     }
     
     open override func viewDidAppear(_ animated: Bool) {
@@ -137,6 +138,11 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             self.setNeedsStatusBarAppearanceUpdate()
         }
     }
+
+	open override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation)
+	{
+		handleRotation()
+	}
     
     internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) { }
     

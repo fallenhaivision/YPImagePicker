@@ -68,7 +68,18 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     public override func loadView() {
         v = YPLibraryView.xibView()
-        view = v
+		if (UIDevice.current.userInterfaceIdiom == .pad)
+		{
+	    	super.loadView()
+			v.translatesAutoresizingMaskIntoConstraints = false
+			view.addSubview(v)
+			v.top(0).bottom(0).width(600)
+			v.centerHorizontally()
+		}
+		else
+		{
+	        view = v
+		}
     }
     
     public override func viewDidLoad() {

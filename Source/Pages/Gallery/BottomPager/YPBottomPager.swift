@@ -26,7 +26,8 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
         return controllers[currentPage]
     }
     
-    override open func loadView() {
+    override open func loadView()
+    {
         self.automaticallyAdjustsScrollViewInsets = false
         v.scrollView.delegate = self
         view = v
@@ -46,6 +47,21 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
                 selectPage(selectedIndex)
             }
         }
+    }
+    
+    func handleRotation()
+    {
+        let viewWidth: CGFloat = UIScreen.main.bounds.width
+        for (index, c) in controllers.enumerated()
+        {
+            let x: CGFloat = CGFloat(index) * viewWidth
+			c.view.leftConstraint?.constant = x
+			c.view.widthConstraint?.constant = viewWidth
+        }
+        
+        let scrollableWidth: CGFloat = CGFloat(controllers.count) * CGFloat(viewWidth)
+        v.scrollView.contentSize = CGSize(width: scrollableWidth, height: 0)
+        v.header.refreshMenuItems()
     }
     
     func reload() {

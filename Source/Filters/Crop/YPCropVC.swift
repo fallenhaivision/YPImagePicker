@@ -24,7 +24,21 @@ class YPCropVC: UIViewController {
     private let panGR = UIPanGestureRecognizer()
     
     private let v: YPCropView
-    override func loadView() { view = v }
+    override func loadView()
+    {
+		if (UIDevice.current.userInterfaceIdiom == .pad)
+		{
+	    	super.loadView()
+			v.translatesAutoresizingMaskIntoConstraints = false
+			view.addSubview(v)
+			v.top(0).bottom(0).width(600)
+			v.centerHorizontally()
+		}
+		else
+		{
+	        view = v
+		}
+    }
     
     required init(image: UIImage, ratio: Double) {
         v = YPCropView(image: image, ratio: ratio)

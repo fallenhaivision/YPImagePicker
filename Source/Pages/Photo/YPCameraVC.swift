@@ -16,7 +16,21 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
     let photoCapture = newPhotoCapture()
     let v: YPCameraView!
     var isInited = false
-    override public func loadView() { view = v }
+    override public func loadView()
+    {
+		if (UIDevice.current.userInterfaceIdiom == .pad)
+		{
+	    	super.loadView()
+			v.translatesAutoresizingMaskIntoConstraints = false
+			view.addSubview(v)
+			v.top(0).bottom(0).width(600)
+			v.centerHorizontally()
+		}
+		else
+		{
+	        view = v
+		}
+    }
 
     public required init() {
         self.v = YPCameraView(overlayView: YPConfig.overlayView)
