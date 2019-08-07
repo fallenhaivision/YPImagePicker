@@ -62,6 +62,9 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
         let scrollableWidth: CGFloat = CGFloat(controllers.count) * CGFloat(viewWidth)
         v.scrollView.contentSize = CGSize(width: scrollableWidth, height: 0)
         v.header.refreshMenuItems()
+
+        let x = CGFloat(currentPage) * UIScreen.main.bounds.width
+        v.scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: false)
     }
     
     func reload() {
