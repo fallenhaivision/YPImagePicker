@@ -23,7 +23,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
 	    	super.loadView()
 			v.translatesAutoresizingMaskIntoConstraints = false
 			view.addSubview(v)
-			v.top(0).bottom(0).width(600)
+			v.top(0).bottom(0).width(540)
 			v.centerHorizontally()
 		}
 		else
