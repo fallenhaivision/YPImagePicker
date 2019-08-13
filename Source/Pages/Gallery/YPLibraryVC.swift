@@ -73,7 +73,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
 	    	super.loadView()
 			v.translatesAutoresizingMaskIntoConstraints = false
 			view.addSubview(v)
-			v.top(0).bottom(0).width(500)
+			v.top(0).bottom(0).width(500)		
 			v.centerHorizontally()
 		}
 		else
