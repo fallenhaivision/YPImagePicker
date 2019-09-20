@@ -48,7 +48,8 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
         v.flashButton.addTarget(self, action: #selector(flashButtonTapped), for: .touchUpInside)
         v.shotButton.addTarget(self, action: #selector(shotButtonTapped), for: .touchUpInside)
         v.flipButton.addTarget(self, action: #selector(flipButtonTapped), for: .touchUpInside)
-        
+		v.shotButton.isEnabled = false
+       
         // Focus
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.focusTapped(_:)))
         tapRecognizer.delegate = self
@@ -65,6 +66,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
                 {
                     self?.isInited = true
                     self?.refreshFlashButton()
+        			self?.v.shotButton.isEnabled = true
 					strongSelf.photoCapture.videoLayer?.connection?.videoOrientation = strongSelf.transformOrientation(orientation: UIInterfaceOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!)
                 }
             })
@@ -123,29 +125,35 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
         // causing a crash
         v.shotButton.isEnabled = false
         
-        photoCapture.shoot { imageData in
+        photoCapture.shoot
+        { imageData in
             
-            guard let shotImage = UIImage(data: imageData) else {
-                return
-            }
-            
-            self.photoCapture.stopCamera()
-            
-            var image = shotImage
-            // Crop the image if the output needs to be square.
-            if YPConfig.onlySquareImagesFromCamera {
-                image = self.cropImageToSquare(image)
-            }
+	        self.v.shotButton.isEnabled = true
+            if let imageData = imageData
+            {
+	            
+	            guard let shotImage = UIImage(data: imageData) else {
+	                return
+	            }
+	            
+	            self.photoCapture.stopCamera()
+	            
+	            var image = shotImage
+	            // Crop the image if the output needs to be square.
+	            if YPConfig.onlySquareImagesFromCamera {
+	                image = self.cropImageToSquare(image)
+	            }
 
-            // Flip image if taken form the front camera.
-            if let device = self.photoCapture.device, device.position == .front {
-                image = self.flipImage(image: image)
-            }
-            
-            DispatchQueue.main.async {
-                let noOrietationImage = image.resetOrientation()
-                self.didCapturePhoto?(noOrietationImage.resizedImageIfNeeded())
-            }
+	            // Flip image if taken form the front camera.
+	            if let device = self.photoCapture.device, device.position == .front {
+	                image = self.flipImage(image: image)
+	            }
+	            
+	            DispatchQueue.main.async {
+	                let noOrietationImage = image.resetOrientation()
+	                self.didCapturePhoto?(noOrietationImage.resizedImageIfNeeded())
+	            }
+	    	}
         }
     }
     
