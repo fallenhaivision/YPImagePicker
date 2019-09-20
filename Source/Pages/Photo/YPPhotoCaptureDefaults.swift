@@ -86,12 +86,28 @@ extension YPPhotoCapture {
         }
     }
     
+    func transformOrientation(orientation: UIInterfaceOrientation) -> AVCaptureVideoOrientation
+    {
+        switch orientation
+        {
+		case .landscapeLeft:
+			return .landscapeLeft
+		case .landscapeRight:
+			return .landscapeRight
+		case .portraitUpsideDown:
+			return .portraitUpsideDown
+        default:
+			return .portrait
+        }
+    }
+    
     func setupPreview() {
         videoLayer = AVCaptureVideoPreviewLayer(session: session)
         DispatchQueue.main.async {
             self.videoLayer.frame = self.previewView.bounds
             self.videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
             self.previewView.layer.addSublayer(self.videoLayer)
+			self.videoLayer.connection?.videoOrientation = self.transformOrientation(orientation: UIInterfaceOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!)
         }
     }
     

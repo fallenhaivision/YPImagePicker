@@ -61,9 +61,11 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
                 return
             }
             self?.photoCapture.start(with: strongSelf.v.previewViewContainer, completion: {
-                DispatchQueue.main.async {
+                DispatchQueue.main.async
+                {
                     self?.isInited = true
                     self?.refreshFlashButton()
+					strongSelf.photoCapture.videoLayer?.connection?.videoOrientation = strongSelf.transformOrientation(orientation: UIInterfaceOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!)
                 }
             })
         }
@@ -169,19 +171,8 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
     
     // Used when image is taken from the front camera.
     func flipImage(image: UIImage!) -> UIImage! {
-        let imageSize: CGSize = image.size
-        UIGraphicsBeginImageContextWithOptions(imageSize, true, 1.0)
-        let ctx = UIGraphicsGetCurrentContext()!
-        ctx.rotate(by: CGFloat(Double.pi/2.0))
-        ctx.translateBy(x: 0, y: -imageSize.width)
-        ctx.scaleBy(x: imageSize.height/imageSize.width, y: imageSize.width/imageSize.height)
-        ctx.draw(image.cgImage!, in: CGRect(x: 0.0,
-                                            y: 0.0,
-                                            width: imageSize.width,
-                                            height: imageSize.height))
-        let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        return newImage
+//		return UIImage(cgImage: image.cgImage!, scale: 1.0, orientation: .downMirrored)
+        return image
     }
     
     @objc
@@ -195,4 +186,32 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
         v.flashButton.setImage(flashImage, for: .normal)
         v.flashButton.isHidden = !photoCapture.hasFlash
     }
+
+    func transformOrientation(orientation: UIInterfaceOrientation) -> AVCaptureVideoOrientation
+    {
+        switch orientation
+        {
+		case .landscapeLeft:
+			return .landscapeLeft
+		case .landscapeRight:
+			return .landscapeRight
+		case .portraitUpsideDown:
+			return .portraitUpsideDown
+        default:
+			return .portrait
+        }
+    }
+    
+	override public func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
+	{
+		coordinator.animate(alongsideTransition:
+		{ (_) in
+			self.photoCapture.videoLayer?.connection?.videoOrientation = self.transformOrientation(orientation: UIInterfaceOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!)
+        },
+        completion:
+		{ _ in
+        })
+        super.viewWillTransition(to: size, with: coordinator)
+    }
+
 }
