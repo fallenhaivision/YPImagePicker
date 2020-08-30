@@ -18,7 +18,7 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
     
-        sv(
+		subviews(
             imageView,
             editIcon,
             editSquare

@@ -31,7 +31,7 @@ final class YPMenuItem: UIView {
     func setup() {
         backgroundColor = .clear
         
-        sv(
+		subviews(
             textLabel,
             button
         )

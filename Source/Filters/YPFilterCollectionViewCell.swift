@@ -6,6 +6,7 @@
 //  Copyright © 2016 octopepper. All rights reserved.
 //
 
+import UIKit
 import Stevia
 
 class YPFilterCollectionViewCell: UICollectionViewCell {
@@ -35,7 +36,7 @@ class YPFilterCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        sv(
+		subviews(
             name,
             imageView
         )
